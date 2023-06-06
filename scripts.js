@@ -49,7 +49,7 @@ async function fetchValue(symbol) {
 async function fetchHistory() {
   const url = `https://stock-exchange-dot-full-stack-course-services.ew.r.appspot.com/api/v3/historical-price-full/${symbolString}?serietype=line`;
 
-  loadingHistory(stockrec, stockup, comchart);
+  loadshistory(stockrec, stockup, comchart);
 
   try {
       const response = await fetch(url);
@@ -186,7 +186,7 @@ async function mainValue() {
 
 async function Search() {
   window.history.pushState({}, "", `./index.html?query=${input.value}`);
-  searchResult.innerHTML = '';
+  res.innerHTML = '';
   loadingElement.style.display = 'inherit';
 
   const resultFetchSearch = await fetchSearch();
@@ -198,12 +198,12 @@ async function Search() {
   await Promise.all(compProfileArray.map(async (compProfile, i) => {
       const newDiv = document.createElement('div');
       newDiv.innerHTML = `<a href="./company.html?symbol=${compProfile.symbol}" target="_blank" class="results-item">${compProfile.profile.companyName}</a> ${compProfile.symbol} ${compProfile.profile.changesPercentage}`;
-      searchResult.appendChild(newDiv);
+      res.appendChild(newDiv);
 
       if (resultFetchSearch.length > i + 1) {
           const newLineDiv = document.createElement('div');
           newLineDiv.classList.add('resultsline');
-          searchResult.appendChild(newLineDiv);
+          res.appendChild(newLineDiv);
       }
   }));
 }
@@ -226,21 +226,21 @@ window.addEventListener('load', function() {
     return;
   }
   input.value = queryString;
-  mainSearch();
+  Search();
 });
 
 if (go && input) {
   go.addEventListener('click', function() {
-    mainSearch();
+    Search();
   });
 
   input.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') {
-      mainSearch();
+      Search();
     }
   });
 
-  input.addEventListener('keydown', debounce(mainSearch, 500));
+  input.addEventListener('keydown', debounce(Search, 500));
 }
 
 
