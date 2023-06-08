@@ -114,9 +114,11 @@ function createChart(array) {
 }
 
 function loadsValue(...elements) {
+  
   elements.forEach(element => {
       element.classList.add('loading');
   });
+  console.log(elements)
 }
 
 function hidesValue(...elements) {
@@ -179,7 +181,7 @@ async function mainValue() {
   hideHistoryLoader(stockrec, stockup, comchart);
   showHistory(resultHistory);
 
-  const filteredArray = splitHistory(resultHistory);
+  const filteredArray = segmentArray(resultHistory);
   createChart(filteredArray);
 }
 
