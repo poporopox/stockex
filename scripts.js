@@ -39,10 +39,10 @@ async function fetchValue(symbol) {
 
   try {
       const response = await fetch(url);
-      // const data = await response.json();
+      const data = await response.json();
       
 
-      return response;
+      return data;
   } catch (error) {
       console.log(error);
   };
@@ -55,8 +55,8 @@ async function fetchHistory() {
 
   try {
       const response = await fetch(url);
-      // const data = await response.json();
-      return response;
+      const data = await response.json();
+      return data.historical;
   } catch (error) {
       console.log(error);
   };
@@ -91,29 +91,35 @@ const segmentArray = (originalArray) => {
 };
 
 function createChart(array) {
-  const labels = array.slice(0, 20).map(item => item[0].date).reverse();
-  const data = array.slice(0, 20).map(item => item[0].close).reverse();
+  const labels = [];
+  const data = [];
+
+  for (let i = 0; i < 20; i++) {
+    labels.push(array[i][0].date);
+    data.push(array[i][0].close);
+  }
 
   new Chart(comchart, {
-      type: 'line',
-      data: {
-          labels: labels,
-          datasets: [{
-              fill: true,
-              label: 'Stock Price History',
-              data: data,
-              borderWidth: 1
-          }]
-      },
-      options: {
-          scales: {
-              y: {
-                  beginAtZero: true
-              }
-          }
+    type: 'line',
+    data: {
+      labels: labels.reverse(),
+      datasets: [{
+        fill: true,
+        label: 'Stock Price History',
+        data: data.reverse(),
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
       }
+    }
   });
 }
+
 
 function loadsValue(...elements) {
   
@@ -164,10 +170,17 @@ const showHistory = (data) => {
 };
 
 
-const createListVal = async (searchCompArray) => {
-  const newCompArray = await Promise.all(searchCompArray.map(object => fetchValue(object.symbol)));
+async function createListVal(searchCompArray) {
+  const newCompArray = [];
+  for (let i = 0; i < searchCompArray.length; i++) {
+    const object = searchCompArray[i];
+    const eachCompValue = await fetchValue(object.symbol);
+    newCompArray.push(eachCompValue);
+  }
+
   return newCompArray;
-};
+}
+
 
 async function mainValue() {
   loadsValue(logoImg, comnam, desc, comweb);
