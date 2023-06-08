@@ -39,8 +39,10 @@ async function fetchValue(symbol) {
 
   try {
       const response = await fetch(url);
-      const data = await response.json();
-      return data;
+      // const data = await response.json();
+      
+
+      return response;
   } catch (error) {
       console.log(error);
   };
@@ -53,8 +55,8 @@ async function fetchHistory() {
 
   try {
       const response = await fetch(url);
-      const data = await response.json();
-      return data.historical;
+      // const data = await response.json();
+      return response;
   } catch (error) {
       console.log(error);
   };
@@ -118,7 +120,7 @@ function loadsValue(...elements) {
   elements.forEach(element => {
       element.classList.add('loading');
   });
-  console.log(elements)
+  
 }
 
 function hidesValue(...elements) {
@@ -128,6 +130,7 @@ function hidesValue(...elements) {
 }
 
 function showValue(data) {
+  console.log(data)
   logoImg.innerHTML = `
       <img src="${data.image}" class="logo-image" />
   `;
@@ -169,20 +172,23 @@ const createListVal = async (searchCompArray) => {
 async function mainValue() {
   loadsValue(logoImg, comnam, desc, comweb);
 
-  const resultValuePromise = fetchValue(symbolString);
+  const resultValuePromise = await fetchValue(symbolString);
+  console.log(resultValuePromise)
   const resultHistoryPromise = fetchHistory();
+  console.log(resultValuePromise)
 
   const [resultValue, resultHistory] = await Promise.allSettled([resultValuePromise, resultHistoryPromise])
       .then(results => results.map(result => result.value));
 
-  hideValueLoader(logoImg, comnam, desc, comweb);
-  showValue(resultValue.Value);
+  hidesValue(logoImg, comnam, desc, comweb);
+  showValue(resultValue.value);
 
-  hideHistoryLoader(stockrec, stockup, comchart);
+  hidehistory(stockrec, stockup, comchart);
   showHistory(resultHistory);
 
   const filteredArray = segmentArray(resultHistory);
   createChart(filteredArray);
+  console.log(resultValue)
 }
 
 
