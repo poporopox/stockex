@@ -9,7 +9,11 @@
     
 </head>
 <body>
-  
+ 
+    
+
+    <h1>NASDAQ Stock EX.</h1>
+    
   
 
     <div class="topnav">
@@ -17,15 +21,21 @@
         <div class="search-container">
             
             <input id="search"type="text" placeholder="Search..." name="search">
-            <button id="butt" type="submit">Go!</button>
+            <button id="butt" type="submit">Search</button>
             <div id="fetchedres"></div>
 
         </div>
 
     </div>
 
-  <div  class="loadercontainer">
+  <div  class="loadercontainer"></div>
   <div id="loading"></div>
- <script src="./scripts.js"></script>   
+
+ <div id="marquee-container" class="marquee-container"></div>
+ 
+ 
+ <script src="searchresults.js"></script>
+  <script src="./marquee.js"></script>
+ <script src="./searchform.js"></script>   
 </body>
 </html>
